@@ -68,7 +68,9 @@ The model used an adam optimizer, so the learning rate was not tuned manually (m
 
 ####4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road and also reversing the driving direction to prevent steering angle bias. I collected two rounds of each and multiple rounds of recovery data providing 5 pools of data to draw from. 
+Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road and also reversing the driving direction to prevent steering angle bias. I collected two rounds of each and multiple rounds of recovery data providing 5 pools of data to draw from. Below is an image from the normal center driving data collection run.
+
+!["Normal Center Camera Image"](../examples/center_2017_05_03_18_55_43_038.jpg)
 
 For details about how I created the training data, see the next section. 
 
@@ -78,26 +80,49 @@ For details about how I created the training data, see the next section.
 
 The overall strategy for deriving a model architecture was to start simple in order to prove the model was working as intended, then build on-top of that for additional feature extraction and performance.
 
-My first step was to use a convolution neural network model similar to the NVIDIA End-to-End Deep Learning Network. This model was appropriate because it was designed with a similar intent to clone human driving behavior with images from three cameras. The NVIDIA Network Architecture consists of 9 layers as shown below:
+My first step was to use a convolution neural network model similar to the NVIDIA End-to-End Deep Learning Network. This model was appropriate because it was designed with a similar intent to clone human driving behavior with images from three cameras. The NVIDIA Network Architecture consists of 9 layers as shown below (courtesy of NVIDIA):
 
+!["NVIDIA End-to-End Deep Learning Network"](../examples/cnn-architecture-624x890.png)
 
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
+For the most part, I kept the architecture the same with a few minor tweaks that provided better results. In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
 
-To combat the overfitting, I modified the model so that ...
+To combat the overfitting, I did two things: Augment the data set through image preprocessing and add dropout layers.
 
-Then I ... 
+The final step was to run the simulator to see how well the car was driving around track one. The first few trys were a complete bust where the car drove straight off the track. After recording a few more runs and augmenting the data set, the vehicle performed better but some trouble spots included:
+	- The left curve right before the bridge
+    - The bridge itself
+    - The right curve after the bridge
+    - The left curve just before a large dirt path
+    
+To improve the driving behavior in these cases, I took more recovery data focusing on those areas. Below is an image for one of those trouble spots while collecting recovery data.
 
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
+!["Recovery Data"](../examples/left_2017_05_10_21_37_37_468.jpg) 
 
-At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
+At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road. My subjective evaluation of the run is that it's incredibly controlled and difficult to distinguish from my own driving. In fact, it's probably a little smoother. There are are one or two instances where it seems like it may begin heading off the road, but it quickly regroups and recovers back to the center of the lane.
 
 ####2. Final Model Architecture
 
 The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
 
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
+Here is a table for visualizing the architecture
 
-![alt text][image1]
+| Layer					|     Description	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| Cropping Layer  		| Cropped image to remove unwanted artifacts	| 
+| Normalization	     	| Used Keras Lambda Layer					 	|
+| Conv2D + LeakyReLU	| 5x5 kernel, 2x2 strides, 24 filters			|
+| Conv2D + LeakyReLU	| 5x5 kernel, 2x2 strides, 36 filters			|
+| Gaussian Dropout	    | 50% dropout to prevent overfitting			|
+| Conv2D + LeakyReLU	| 5x5 kernel, 2x2 strides, 48 filters			|
+| Conv2D + LeakyReLU	| 3x3 kernel, 64 filters						|
+| Dropout				| 50% dropout to prevent overfitting			|
+| Conv2D + LeakyReLU	| 3x3 kernel,  64 filters						|
+| Flatten				| 												|
+| Fully Connected		| 100											|
+| Fully Connected		| 50											|
+| Dropout               | 50% dropout to prevent overfitting            |
+| Fully Connected		| 10											|
+| Fully Connected		| 1												|
 
 ####3. Creation of the Training Set & Training Process
 
