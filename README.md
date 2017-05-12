@@ -26,14 +26,13 @@ Using the Udacity provided simulator and my drive.py file, the car can be driven
 ```sh
 python drive.py model.h5
 ```
-
 #### 3. Submission code is usable and readable
 
 The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
 ### Model Architecture and Training Strategy
 
-#### . An appropriate model architecture has been employed
+#### 1. An appropriate model architecture has been employed
 
 My model consists of a convolution neural network with 5x5 and 3x3 filter sizes and depths between 24 and 64 (model.py lines 83-103) 
 
@@ -65,7 +64,7 @@ The overall strategy for deriving a model architecture was to start simple in or
 
 My first step was to use a convolution neural network model similar to the NVIDIA End-to-End Deep Learning Network. This model was appropriate because it was designed with a similar intent to clone human driving behavior with images from three cameras. The NVIDIA Network Architecture consists of 9 layers as shown below (courtesy of NVIDIA):
 
-!["NVIDIA End-to-End Deep Learning Network"](../examples/cnn-architecture-624x890.png)
+!["NVIDIA End-to-End Deep Learning Network"](./examples/cnn-architecture-624x890.png)
 
 For the most part, I kept the architecture the same with a few minor tweaks that provided better results. In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
 
