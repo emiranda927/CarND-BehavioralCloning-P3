@@ -102,7 +102,7 @@ Here is a table for visualizing the architecture
 | Conv2D + LeakyReLU	| 3x3 kernel, 64 filters						|
 | Dropout				| 50% dropout to prevent overfitting			|
 | Conv2D + LeakyReLU	| 3x3 kernel,  64 filters						|
-| Flatten				| 												|
+| Flatten				| Stack of neurons								|
 | Fully Connected		| 100											|
 | Fully Connected		| 50											|
 | Dropout               | 50% dropout to prevent overfitting            |
