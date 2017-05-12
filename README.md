@@ -1,8 +1,4 @@
-#**Behavioral Cloning** 
-
----
-
-**Behavioral Cloning Project**
+# Behavioral Cloning Project
 
 The goals / steps of this project are the following:
 * Use the simulator to collect data of good driving behavior
@@ -12,12 +8,12 @@ The goals / steps of this project are the following:
 * Summarize the results with a written report
 
 ## Rubric Points
-###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
+### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
 
 ---
-###Files Submitted & Code Quality
+### Files Submitted & Code Quality
 
-####1. Submission includes all required files and can be used to run the simulator in autonomous mode
+#### 1. Submission includes all required files and can be used to run the simulator in autonomous mode
 
 My project includes the following files:
 * model.py containing the script to create and train the model
@@ -25,19 +21,19 @@ My project includes the following files:
 * model.h5 containing a trained convolution neural network 
 * README.md summarizing the results
 
-####2. Submission includes functional code
+#### 2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
 ```sh
 python drive.py model.h5
 ```
 
-####3. Submission code is usable and readable
+#### 3. Submission code is usable and readable
 
 The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
-###Model Architecture and Training Strategy
+### Model Architecture and Training Strategy
 
-####1. An appropriate model architecture has been employed
+#### . An appropriate model architecture has been employed
 
 My model consists of a convolution neural network with 5x5 and 3x3 filter sizes and depths between 24 and 64 (model.py lines 83-103) 
 
@@ -45,25 +41,25 @@ The model includes LeakyReLU layers to introduce nonlinearity (code line 87), an
 
 Using LeakyReLU in place of the normal ReLU activation function was purely an excercise out of curiosity. Upon evaluation of the simulator's performance, it was clear to me that the LeakyReLU provided better overall results than the previous model.
 
-####2. Attempts to reduce overfitting in the model
+#### 2. Attempts to reduce overfitting in the model
 
 The model contains gaussian dropout and regular dropout layers in order to reduce overfitting (model.py lines 90 & 95). 
 
 The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 73). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
-####3. Model parameter tuning
+#### 3. Model parameter tuning
 
 The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 105).
 
-####4. Appropriate training data
+#### 4. Appropriate training data
 
 Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road and also reversing the driving direction to prevent steering angle bias. I collected two rounds of each and multiple rounds of recovery data providing 5 pools of data to draw from.
 
 For details about how I created the training data, see the next section. 
 
-###Model Architecture and Training Strategy
+### Model Architecture and Training Strategy
 
-####1. Solution Design Approach
+#### 1. Solution Design Approach
 
 The overall strategy for deriving a model architecture was to start simple in order to prove the model was working as intended, then build on-top of that for additional feature extraction and performance.
 
@@ -85,11 +81,9 @@ To improve the driving behavior in these cases, I took more recovery data focusi
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road. My subjective evaluation of the run is that it's incredibly controlled and difficult to distinguish from my own driving. In fact, it's probably a little smoother. There are are one or two instances where it seems like it may begin heading off the road, but it quickly regroups and recovers back to the center of the lane.
 
-####2. Final Model Architecture
+#### 2. Final Model Architecture
 
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
-
-Here is a table for visualizing the architecture
+The final model architecture consisted of a convolution neural network with the following layers and layer sizes:
 
 | Layer					|     Description	        					| 
 |:---------------------:|:---------------------------------------------:| 
@@ -109,7 +103,7 @@ Here is a table for visualizing the architecture
 | Fully Connected		| 10											|
 | Fully Connected		| 1												|
 
-####3. Creation of the Training Set & Training Process
+#### 3. Creation of the Training Set & Training Process
 
 To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
 
