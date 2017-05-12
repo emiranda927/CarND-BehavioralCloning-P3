@@ -106,13 +106,13 @@ The final model architecture consisted of a convolution neural network with the 
 
 To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
 
-!["Normal Center Camera Image"](../examples/center_2017_05_03_18_55_43_038.jpg)
+!["Normal Center Camera Image"](./examples/center_2017_05_03_18_55_43_038.jpg)
 
 I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to increase the steering angle when it detected the edge of the road. These images show what a recovery looks like :
 
-!["Recovery Data"](../examples/left_2017_05_10_21_37_37_468.jpg)
+!["Recovery Data"](./examples/left_2017_05_10_21_37_37_468.jpg)
 
-!["Recovery Data"](../examples/center_2017_05_07_17_35_23_974.jpg)
+!["Recovery Data"](./examples/center_2017_05_07_17_35_23_974.jpg)
 
 Adding data from track two didn't seem to improve my model. It was sufficient using only data from track 1.
 
@@ -130,7 +130,7 @@ I finally randomly shuffled the data set and put 20% of the data into a validati
 
 I used generator objects to provide training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was about 8 or 9 as evidenced by validation and training loss in the figure below:
 
-!["Model Visualization"](../examples/figure_1.png)
+!["Model Visualization"](./examples/figure_1.png)
 
 I used an adam optimizer so that manually training the learning rate wasn't necessary.
 
