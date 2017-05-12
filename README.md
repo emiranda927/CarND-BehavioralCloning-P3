@@ -14,7 +14,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-![image1](../examples/figure_1.png) "Model Visualization"
+
 [image2]: ./examples/placeholder.png "Grayscaling"
 [image3]: ./examples/placeholder_small.png "Recovery Image"
 [image4]: ./examples/placeholder_small.png "Recovery Image"
@@ -34,7 +34,7 @@ My project includes the following files:
 * model.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
-* writeup_report.md summarizing the results
+* README.md summarizing the results
 
 ####2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
@@ -68,9 +68,7 @@ The model used an adam optimizer, so the learning rate was not tuned manually (m
 
 ####4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road and also reversing the driving direction to prevent steering angle bias. I collected two rounds of each and multiple rounds of recovery data providing 5 pools of data to draw from. Below is an image from the normal center driving data collection run.
-
-!["Normal Center Camera Image"](../examples/center_2017_05_03_18_55_43_038.jpg)
+Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road and also reversing the driving direction to prevent steering angle bias. I collected two rounds of each and multiple rounds of recovery data providing 5 pools of data to draw from.
 
 For details about how I created the training data, see the next section. 
 
@@ -95,8 +93,6 @@ The final step was to run the simulator to see how well the car was driving arou
     - The left curve just before a large dirt path
     
 To improve the driving behavior in these cases, I took more recovery data focusing on those areas. Below is an image for one of those trouble spots while collecting recovery data.
-
-!["Recovery Data"](../examples/left_2017_05_10_21_37_37_468.jpg) 
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road. My subjective evaluation of the run is that it's incredibly controlled and difficult to distinguish from my own driving. In fact, it's probably a little smoother. There are are one or two instances where it seems like it may begin heading off the road, but it quickly regroups and recovers back to the center of the lane.
 
@@ -128,26 +124,32 @@ Here is a table for visualizing the architecture
 
 To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
 
-![alt text][image2]
+!["Normal Center Camera Image"](../examples/center_2017_05_03_18_55_43_038.jpg)
 
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
+I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to increase the steering angle when it detected the edge of the road. These images show what a recovery looks like :
 
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
+!["Recovery Data"](../examples/left_2017_05_10_21_37_37_468.jpg)
 
-Then I repeated this process on track two in order to get more data points.
+!["Recovery Data"](../examples/center_2017_05_07_17_35_23_974.jpg)
 
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
+Adding data from track two didn't seem to improve my model. It was sufficient using only data from track 1.
 
-![alt text][image6]
-![alt text][image7]
+To augment the data sat, I also flipped images and angles thinking that this would help the model generalize better and prevent any sort of lane bias.
 
-Etc ....
+After the collection process, I had approximately 87,000 data points. With this amount of data in storage, I began running into memory storage issues on my GPU. After further investigation, I learned that the culprit was of the spike in memory usage was process of casting the array of images as a Numpy array.
 
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+```sh
+X_train = np.array(flipped_images)
+y_train = np.array(flipped_angles)
+```
+Because the numpy array was not pre-allocated, it effectively needed to store every image in memory while converting. In order to combat this, I used a generator object to train the model, providing smaller batches of data that could be individually released from memory once it was done processing.
 
+I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
+I used generator objects to provide training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was about 8 or 9 as evidenced by validation and training loss in the figure below:
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+!["Model Visualization"](../examples/figure_1.png)
+
+I used an adam optimizer so that manually training the learning rate wasn't necessary.
+
+Overall, the model took a few tries but ended up performing much better than expected. I would like to dive further into this by attempting to merge behavioral cloning with computer vision techniques by creating "boundary zone" masks on the training data to prevent it from ever crossing over the track boundaries.
